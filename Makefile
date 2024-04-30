@@ -58,9 +58,7 @@ compile_assembly:
 # Компиляция объектных файлов
 compile_objects:
 	@echo "Compiling source files"
-	"/Applications/ARM/bin/arm-none-eabi-gcc" -std=c99 -MP -MD -c -o $(OUTPUT_DIRECTORY)/main.c.o $(PROJ_DIR)/main.c $(CFLAGS) $(INC_FOLDERS)
-	"/Applications/ARM/bin/arm-none-eabi-gcc" -std=c99 -MP -MD -c -o $(OUTPUT_DIRECTORY)/system_nrf52840.c.o $(SDK_ROOT)/modules/nrfx/mdk/system_nrf52840.c $(CFLAGS) $(INC_FOLDERS)
-
+	$(foreach src_file,$(SRC_FILES),"/Applications/ARM/bin/arm-none-eabi-gcc" -std=c99 -MP -MD -c -o $(OUTPUT_DIRECTORY)/$(notdir $(src_file)).o $(src_file) $(CFLAGS) $(INC_FOLDERS);)
 
 # Создание файла nrf52840_xxaa.in
 create_nrf52840_xxaa_in:
