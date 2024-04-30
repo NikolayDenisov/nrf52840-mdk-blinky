@@ -19,7 +19,7 @@ void led_on() {
     NRF_P0->OUTSET = (1UL << LED_PIN); // Устанавливаем пин светодиода в логическую 1 (выключаем светодиод)
 }
 
-void nrf_delay_ms() {
+void nrf_delay() {
     for (volatile int i = 0; i < 5000000; ++i);
 }
 
@@ -29,8 +29,8 @@ int main() {
 
     while(1) {
         led_on();
-        nrf_delay_ms();
+        nrf_delay();
         led_off();
-        nrf_delay_ms();
+        nrf_delay();
     }
 }
