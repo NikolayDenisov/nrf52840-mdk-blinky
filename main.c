@@ -25,7 +25,6 @@ void nrf_delay() {
 
 int main() {
     gpio_init(); // Инициализируем GPIO для управления светодиодом
-    timer_init(); // Инициализируем таймер SysTick
 
     while(1) {
         led_on();
