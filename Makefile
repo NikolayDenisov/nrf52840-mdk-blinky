@@ -44,14 +44,13 @@ LIB_FILES += -lc -lnosys -lm
 build: $(SRC_FILES)
 	@echo "Creating build directory"
 	mkdir -p $(OUTPUT_DIRECTORY)
-	@$(MAKE) compile_assembly
-	@$(MAKE) compile_assembly
+	@$(MAKE) assembling
 	@$(MAKE) compile_objects
 	@$(MAKE) create_nrf52840_xxaa_in
 	@$(MAKE) link_objects
 	@$(MAKE) create_hex_file
 
-compile_assembly:
+assembling:
 	@echo "Compiling assembly source files"
 	"/Applications/ARM/bin/arm-none-eabi-gcc" -x assembler-with-cpp -MP -MD -c -o $(OUTPUT_DIRECTORY)/gcc_startup_nrf52840.S.o $(SDK_ROOT)/modules/nrfx/mdk/gcc_startup_nrf52840.S $(LDFLAGS) $(INC_FOLDERS)
 
@@ -73,7 +72,7 @@ link_objects:
 # Создание .hex файла
 create_hex_file:
 	@echo "Creating binary .hex file from the .out file"
-	'/Applications/ARM/bin/arm-none-eabi-objcopy' -O ihex $(OUTPUT_DIRECTORY)/$(TARGET).out $(OUTPUT_DIRECTORY)/$(TARGET).hex
+	"/Applications/ARM/bin/arm-none-eabi-objcopy" -O ihex $(OUTPUT_DIRECTORY)/$(TARGET).out $(OUTPUT_DIRECTORY)/$(TARGET).hex
 
 # Очистка сборочных файлов
 clean:

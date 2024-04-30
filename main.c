@@ -6,17 +6,20 @@
 // Функция для инициализации GPIO
 void gpio_init() {
     // Включаем тактирование порта GPIO
+    // Write: a '1' sets pin to output; a '0' has no effect
     NRF_P0->DIRSET = (1UL << LED_PIN); // Настраиваем пин светодиода как выход
 }
 
 // Функция для включения светодиода
 void led_off() {
-    NRF_P0->OUTCLR = (1UL << LED_PIN); // Устанавливаем пин светодиода в логический 0 (включаем светодиод)
+    // Write: a '1' sets the pin low; a '0' has no effect
+    NRF_P0->OUTCLR = (1UL << LED_PIN); // Устанавливаем регистр в логическую 1 (выключаем светодиод)
 }
 
 // Функция для выключения светодиода
 void led_on() {
-    NRF_P0->OUTSET = (1UL << LED_PIN); // Устанавливаем пин светодиода в логическую 1 (выключаем светодиод)
+    // Write: a '1' sets the pin high; a '0' has no effect
+    NRF_P0->OUTSET = (1UL << LED_PIN); // Устанавливаем пин светодиода в логическую 1 (включаем светодиод)
 }
 
 void nrf_delay() {
