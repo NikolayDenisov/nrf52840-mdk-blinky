@@ -1,4 +1,3 @@
-# Имя проекта
 PROJECT_NAME     := blink_led
 TARGET           := nrf52840_xxaa
 OUTPUT_DIRECTORY := _build
@@ -6,9 +5,12 @@ OUTPUT_DIRECTORY := _build
 # Пути
 SDK_ROOT := /Users/nick/projects/iot/nRF5_SDK_17.1.0_ddde560
 PROJ_DIR := /Users/nick/projects/iot/nrf52840-mdk-blinky
+ARM_NONE_EABI := /Applications/ARM/bin/arm-none-eabi
+GCC := $(ARM_NONE_EABI)-gcc
+OBJCOPY := $(ARM_NONE_EABI)-objcopy
 
 # Флаги оптимизации
-OPT := -O3 -g3
+OPT := -O0 -g3
 
 # Параметры компиляции
 CFLAGS += $(OPT)
@@ -20,7 +22,7 @@ CFLAGS += -DNRF52840_XXAA
 
 # Параметры линковки
 LDFLAGS += $(OPT)
-LDFLAGS += -mthumb -mabi=aapcs -L$(SDK_ROOT)/modules/nrfx/mdk -Twfe_gcc_nrf52.ld
+LDFLAGS += -mthumb -mabi=aapcs -L$(SDK_ROOT)/modules/nrfx/mdk -Tblinky_gcc_nrf52.ld
 LDFLAGS += -mcpu=cortex-m4
 LDFLAGS += -mfloat-abi=hard -mfpu=fpv4-sp-d16
 LDFLAGS += -Wl,--gc-sections
@@ -52,12 +54,12 @@ build: $(SRC_FILES)
 
 assembling:
 	@echo "Compiling assembly source files"
-	"/Applications/ARM/bin/arm-none-eabi-gcc" -x assembler-with-cpp -MP -MD -c -o $(OUTPUT_DIRECTORY)/gcc_startup_nrf52840.S.o $(SDK_ROOT)/modules/nrfx/mdk/gcc_startup_nrf52840.S $(LDFLAGS) $(INC_FOLDERS)
+	$(GCC) -x assembler-with-cpp -MP -MD -c -o $(OUTPUT_DIRECTORY)/gcc_startup_nrf52840.S.o $(SDK_ROOT)/modules/nrfx/mdk/gcc_startup_nrf52840.S $(LDFLAGS) $(INC_FOLDERS)
 
 # Компиляция объектных файлов
 compile_objects:
 	@echo "Compiling source files"
-	$(foreach src_file,$(SRC_FILES),"/Applications/ARM/bin/arm-none-eabi-gcc" -std=c99 -MP -MD -c -o $(OUTPUT_DIRECTORY)/$(notdir $(src_file)).o $(src_file) $(CFLAGS) $(INC_FOLDERS);)
+	$(foreach src_file,$(SRC_FILES),$(GCC) -std=c99 -MP -MD -c -o $(OUTPUT_DIRECTORY)/$(notdir $(src_file)).o $(src_file) $(CFLAGS) $(INC_FOLDERS);)
 
 # Создание файла nrf52840_xxaa.in
 create_nrf52840_xxaa_in:
@@ -67,7 +69,7 @@ create_nrf52840_xxaa_in:
 # Линковка объектных файлов
 link_objects:
 	@echo "Linking object files"
-	"/Applications/ARM/bin/arm-none-eabi-gcc" $(LDFLAGS) @_build/nrf52840_xxaa.in -Wl,-Map=_build/nrf52840_xxaa.map -o _build/nrf52840_xxaa.out $(LIB_FILES)
+	$(GCC) $(LDFLAGS) @_build/nrf52840_xxaa.in -Wl,-Map=_build/nrf52840_xxaa.map -o _build/nrf52840_xxaa.out $(LIB_FILES)
 
 # Создание .hex файла
 create_hex_file:
