@@ -1,4 +1,3 @@
-PROJECT_NAME     := blink_led
 TARGET           := nrf52840_xxaa
 OUTPUT_DIRECTORY := _build
 
